@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 import numpy as np
+import os
 
 # Page Configuration
 st.set_page_config(
@@ -10,11 +11,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Load Models
+# Load Models - Fixed paths for cloud deployment
 @st.cache_resource
 def load_models():
-    model = joblib.load('/home/benny/drug_project/models/xgb_model.pkl')
-    scaler = joblib.load('/home/benny/drug_project/models/scaler.pkl')
+    # Get the directory where the script is located
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_dir = os.path.dirname(script_dir)
+    
+    # Load models using relative paths
+    model = joblib.load(os.path.join(project_dir, 'models', 'xgb_model.pkl'))
+    scaler = joblib.load(os.path.join(project_dir, 'models', 'scaler.pkl'))
     return model, scaler
 
 model, scaler = load_models()
